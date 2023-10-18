@@ -63,7 +63,7 @@ adminRouter.get('/admin/get-orders',admin,async (req,res) =>{
    }
 });
 
-// delete the product
+// change order status the product
 adminRouter.post('/admin/change-order-status', admin, async(req, res)=>{
 
    try{
@@ -131,5 +131,27 @@ async function fetchCategoryWiseProduct(category) {
    return earnings;
  }
  
+
+ // update product 
+ adminRouter.put('/admin/products-update', admin, async( req, res)=>{
+    try{
+       const{id,name,description,quantity,price,category,images } = req.body;
+       let product = await Product.findById(id);
+        
+       product.name = name;
+       product.description= description;
+       product.images = images;
+       product.quantity = quantity;
+       product.price =price;
+       product.category = category;
+
+       product = await product.save();
+       res.json(product);
+    }catch(e){
+      res.status(500).json({error: e.message});
+    }
+ });
+
+
 
 module.exports = adminRouter;

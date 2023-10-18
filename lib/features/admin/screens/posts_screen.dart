@@ -1,5 +1,6 @@
 import 'package:amazon_clone_nodejs/common/widgets/loader.dart';
 import 'package:amazon_clone_nodejs/features/admin/screens/add_product_screen.dart';
+import 'package:amazon_clone_nodejs/features/admin/screens/update_products_screen.dart';
 import 'package:amazon_clone_nodejs/models/product.dart';
 import 'package:flutter/material.dart';
 import '../../account/widgets/single_product.dart';
@@ -36,6 +37,11 @@ class _PostsScreenState extends State<PostsScreen> {
         setState(() {});
       },
     );
+  }
+
+  void navigatorupdateProduct(Product product) {
+    Navigator.pushNamed(context, UpdateProductScreen.routeName,
+        arguments: product);
   }
 
   void navigateToAddProduct() {
@@ -75,6 +81,15 @@ class _PostsScreenState extends State<PostsScreen> {
                           onPressed: () => deleteProduct(productData, index),
                           icon: const Icon(
                             Icons.delete_outline,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        IconButton(
+                          onPressed: () => navigatorupdateProduct(productData),
+                          icon: const Icon(
+                            Icons.edit,
                           ),
                         ),
                       ],

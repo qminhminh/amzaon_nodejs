@@ -230,4 +230,58 @@ class AdminServices {
       'totalEarnings': totalEarning,
     };
   }
+
+// update product
+  void updateProduct({
+    required BuildContext context,
+    required String? id,
+    required String name,
+    required String description,
+    required double price,
+    required double quantity,
+    required String category,
+    required List<File> images,
+  }) async {
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final cloudinary = CloudinaryPublic('dijk9w0jo', 'i3e7o3ue');
+      List<String> imageUrls = [];
+
+      for (int i = 0; i < images.length; i++) {
+        CloudinaryResponse res = await cloudinary
+            .uploadFile(CloudinaryFile.fromFile(images[i].path, folder: name));
+        imageUrls.add(res.secureUrl);
+      }
+
+      Product product = Product(
+        id: id,
+        name: name,
+        description: description,
+        quantity: quantity,
+        images: imageUrls,
+        category: category,
+        price: price,
+      );
+
+      http.Response res = await http.put(
+        Uri.parse('$uri/admin/products-update'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token
+        },
+        body: product.toJson(),
+      );
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            showSnackBar(context, 'Product Updated Success');
+            Navigator.pop(context);
+          });
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, e.toString());
+    }
+  }
 }

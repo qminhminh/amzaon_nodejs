@@ -1,5 +1,6 @@
 import 'package:amazon_clone_nodejs/common/bottom_bar.dart';
 import 'package:amazon_clone_nodejs/features/admin/screens/add_product_screen.dart';
+import 'package:amazon_clone_nodejs/features/admin/screens/update_products_screen.dart';
 import 'package:amazon_clone_nodejs/features/auth/screens/auth_screen.dart';
 import 'package:amazon_clone_nodejs/features/home/screens/category_deals_screen.dart';
 import 'package:amazon_clone_nodejs/features/home/screens/home_screen.dart';
@@ -31,7 +32,14 @@ Route<dynamic> generateRooute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => const AddProductScreen(),
       );
-
+    case UpdateProductScreen.routeName:
+      var product = routeSettings.arguments as Product;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => UpdateProductScreen(
+          product: product,
+        ),
+      );
     case CategoryDealsScreen.routeName:
       var category = routeSettings.arguments as String;
       return MaterialPageRoute(
