@@ -2,6 +2,7 @@ const express = require('express');
 const admin = require('../middlewares/admin');
 const {Product} = require('../models/product');
 const Order = require('../models/order');
+const User = require('../models/user');
 const adminRouter = express.Router();
 
 // add admin add product
@@ -153,5 +154,46 @@ async function fetchCategoryWiseProduct(category) {
  });
 
 
+// get all user 
+adminRouter.get('/admin/get-users', admin, async(req ,res) =>{
+   try{
+
+      const user = await User.find({});
+      res.json(user);
+   }catch(e){
+      res.status(500).json({error: e.message});
+   }
+});
+
+// delete id user
+adminRouter.delete('/admin/delete-user',admin, async(req, res)=>{
+   try{
+
+      const {id} = req.body;
+      let user = await User.findByIdAndDelete(id);
+      res.json(user);
+   }catch(e){
+      res.status(500).json({error: e.message});
+   }
+});
+
+// get card user
+// adminRouter.get('/admin/get-cart-user',admin, async(req, res)=>{
+//    try{
+
+//       const {id} = req.body;
+//       const product = await Product.findById({});
+//       let user = await User.findById(id);
+
+//       for(let i = 0; i < user.cart.length ; i++){
+//          if (user.cart[i].product._id.equals(product._id)) {
+//           res.json(user.cart[i].product);
+//          }
+//       }
+      
+//    }catch(e){
+//       res.status(500).json({error: e.message});
+//    }
+// });
 
 module.exports = adminRouter;

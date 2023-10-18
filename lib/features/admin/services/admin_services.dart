@@ -6,6 +6,7 @@ import 'package:amazon_clone_nodejs/constants/utils.dart';
 import 'package:amazon_clone_nodejs/features/admin/models/sales.dart';
 import 'package:amazon_clone_nodejs/models/order.dart';
 import 'package:amazon_clone_nodejs/models/product.dart';
+import 'package:amazon_clone_nodejs/models/user.dart';
 import 'package:amazon_clone_nodejs/providers/user_provider.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
@@ -284,4 +285,89 @@ class AdminServices {
       showSnackBar(context, e.toString());
     }
   }
+
+  // get all user
+  Future<List<User>> getAllUsers(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<User> list = [];
+
+    try {
+      http.Response res =
+          await http.get(Uri.parse('$uri/admin/get-users'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userProvider.user.token
+      });
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            for (int i = 0; i < jsonDecode(res.body).length; i++) {
+              list.add(User.fromJson(jsonEncode(jsonDecode(res.body)[i])));
+            }
+          });
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, e.toString());
+    }
+
+    return list;
+  }
+
+  // delete user for admin
+  void deleteUser({
+    required BuildContext context,
+    required User user,
+    required VoidCallback onSuccess,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.delete(
+        Uri.parse('$uri/admin/delete-user'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token
+        },
+        body: jsonEncode({'id': user.id}),
+      );
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            onSuccess();
+          });
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  // get cart usser
+  // void getCartUser({
+  //   required BuildContext context,
+  //   required User user,
+  // }) async {
+  //   final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+  //   try {
+  //     http.Response res = await http.delete(
+  //       Uri.parse('$uri/admin/get-cart-user'),
+  //       headers: {
+  //         'Content-Type': 'application/json; charset=UTF-8',
+  //         'x-auth-token': userProvider.user.token
+  //       },
+  //       body: jsonEncode({'id': user.id}),
+  //     );
+
+  //     // ignore: use_build_context_synchronously
+  //     httpErrorHandle(response: res, context: context, onSuccess: () {});
+  //   } catch (e) {
+  //     // ignore: use_build_context_synchronously
+  //     showSnackBar(context, e.toString());
+  //   }
+  // }
 }

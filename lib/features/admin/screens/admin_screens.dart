@@ -2,6 +2,7 @@ import 'package:amazon_clone_nodejs/constants/global_variables.dart';
 import 'package:amazon_clone_nodejs/features/admin/screens/analtyics_screen.dart';
 import 'package:amazon_clone_nodejs/features/admin/screens/orders_screen.dart';
 import 'package:amazon_clone_nodejs/features/admin/screens/posts_screen.dart';
+import 'package:amazon_clone_nodejs/features/admin/screens/user_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _AdminScreenState extends State<AdminScreen> {
     const PostsScreen(),
     const AnalyticsScreen(),
     const OrdersScreen(),
+    const UserDetailScreen(),
   ];
 
   void updatePage(int page) {
@@ -127,6 +129,26 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
               child: const Icon(
                 Icons.all_inbox_outlined,
+              ),
+            ),
+            label: '',
+          ),
+          //  USER DETAIL SCREEN
+          BottomNavigationBarItem(
+            icon: Container(
+              width: bottomBarWidth,
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: _page == 3
+                        ? GlobalVariables.selectedNavBarColor
+                        : GlobalVariables.backgroundColor,
+                    width: bottomBarBorderWidth,
+                  ),
+                ),
+              ),
+              child: const Icon(
+                Icons.person_2,
               ),
             ),
             label: '',
