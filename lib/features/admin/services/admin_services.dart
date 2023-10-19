@@ -345,29 +345,4 @@ class AdminServices {
       showSnackBar(context, e.toString());
     }
   }
-
-  // get cart usser
-  // void getCartUser({
-  //   required BuildContext context,
-  //   required User user,
-  // }) async {
-  //   final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-  //   try {
-  //     http.Response res = await http.delete(
-  //       Uri.parse('$uri/admin/get-cart-user'),
-  //       headers: {
-  //         'Content-Type': 'application/json; charset=UTF-8',
-  //         'x-auth-token': userProvider.user.token
-  //       },
-  //       body: jsonEncode({'id': user.id}),
-  //     );
-
-  //     // ignore: use_build_context_synchronously
-  //     httpErrorHandle(response: res, context: context, onSuccess: () {});
-  //   } catch (e) {
-  //     // ignore: use_build_context_synchronously
-  //     showSnackBar(context, e.toString());
-  //   }
-  // }
 }

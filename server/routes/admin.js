@@ -177,23 +177,6 @@ adminRouter.delete('/admin/delete-user',admin, async(req, res)=>{
    }
 });
 
-// get card user
-// adminRouter.get('/admin/get-cart-user',admin, async(req, res)=>{
-//    try{
 
-//       const {id} = req.body;
-//       const product = await Product.findById({});
-//       let user = await User.findById(id);
-
-//       for(let i = 0; i < user.cart.length ; i++){
-//          if (user.cart[i].product._id.equals(product._id)) {
-//           res.json(user.cart[i].product);
-//          }
-//       }
-      
-//    }catch(e){
-//       res.status(500).json({error: e.message});
-//    }
-// });
 
 module.exports = adminRouter;
