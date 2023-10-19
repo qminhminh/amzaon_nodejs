@@ -117,8 +117,8 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                               }, itemBuilder: (context) {
                                 return [
                                   const PopupMenuItem(
-                                    value: 'edit',
-                                    child: Text('Edit'),
+                                    value: 'see cart',
+                                    child: Text('Cart'),
                                   ),
                                   const PopupMenuItem(
                                     value: 'delete',
