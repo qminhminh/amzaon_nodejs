@@ -1,5 +1,6 @@
 import 'package:amazon_clone_nodejs/common/bottom_bar.dart';
 import 'package:amazon_clone_nodejs/features/admin/screens/add_product_screen.dart';
+import 'package:amazon_clone_nodejs/features/admin/screens/cart_user.dart';
 import 'package:amazon_clone_nodejs/features/admin/screens/update_products_screen.dart';
 import 'package:amazon_clone_nodejs/features/auth/screens/auth_screen.dart';
 import 'package:amazon_clone_nodejs/features/home/screens/category_deals_screen.dart';
@@ -8,6 +9,7 @@ import 'package:amazon_clone_nodejs/features/product_detail/screens/product_deta
 import 'package:amazon_clone_nodejs/features/search/screens/search_screen.dart';
 import 'package:amazon_clone_nodejs/models/order.dart';
 import 'package:amazon_clone_nodejs/models/product.dart';
+import 'package:amazon_clone_nodejs/models/user.dart';
 import 'package:amazon_clone_nodejs/order_details/order_details.dart';
 import 'package:flutter/material.dart';
 
@@ -46,6 +48,14 @@ Route<dynamic> generateRooute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => CategoryDealsScreen(
           category: category,
+        ),
+      );
+    case CartUser.routeName:
+      var user = routeSettings.arguments as User;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => CartUser(
+          user: user,
         ),
       );
     case SearchScreen.routeName:
