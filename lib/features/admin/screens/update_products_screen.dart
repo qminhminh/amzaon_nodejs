@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:amazon_clone_nodejs/common/widgets/custom_button.dart';
-import 'package:amazon_clone_nodejs/common/widgets/custom_textdield.dart';
 import 'package:amazon_clone_nodejs/constants/global_variables.dart';
 import 'package:amazon_clone_nodejs/constants/utils.dart';
 import 'package:amazon_clone_nodejs/features/admin/services/admin_services.dart';
@@ -20,24 +19,15 @@ class UpdateProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<UpdateProductScreen> {
-  final TextEditingController productNameController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
-  final TextEditingController quantityController = TextEditingController();
+  String productName = '';
+  String description = '';
+  String price = '';
+  String quantity = '';
   final AdminServices adminServices = AdminServices();
 
   String category = 'Mobiles';
   List<File> images = [];
   final _addProductFormKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    super.dispose();
-    productNameController.dispose();
-    descriptionController.dispose();
-    priceController.dispose();
-    quantityController.dispose();
-  }
 
   List<String> productCategories = [
     'Mobiles',
@@ -53,10 +43,11 @@ class _AddProductScreenState extends State<UpdateProductScreen> {
       adminServices.updateProduct(
           context: context,
           id: widget.product.id,
-          name: productNameController.text,
-          description: descriptionController.text,
-          price: double.parse(priceController.text),
-          quantity: double.parse(quantityController.text),
+          name: productName == '' ? widget.product.name : productName,
+          description:
+              description == '' ? widget.product.description : description,
+          price: price == '' ? widget.product.price : 0,
+          quantity: quantity == '' ? widget.product.quantity : 0,
           category: category,
           images: images);
     }
@@ -148,25 +139,72 @@ class _AddProductScreenState extends State<UpdateProductScreen> {
                         ),
                       ),
                 const SizedBox(height: 30),
-                CustomTextField(
-                  controller: productNameController,
-                  hintText: 'Product Name',
+                TextFormField(
+                  onChanged: (val) => productName = val ?? '',
+                  validator: (val) =>
+                      val != null && val.isNotEmpty ? null : 'Required Field',
+                  initialValue: widget.product.name,
+                  decoration: const InputDecoration(
+                      hintText: 'Product Name',
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Colors.black38,
+                      )),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Colors.black38,
+                      ))),
                 ),
                 const SizedBox(height: 10),
-                CustomTextField(
-                  controller: descriptionController,
-                  hintText: 'Description',
-                  maxLines: 7,
+                TextFormField(
+                  onChanged: (val) => description = val ?? '',
+                  validator: (val) =>
+                      val != null && val.isNotEmpty ? null : 'Required Field',
+                  initialValue: widget.product.description,
+                  decoration: const InputDecoration(
+                      hintText: 'Description',
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Colors.black38,
+                      )),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Colors.black38,
+                      ))),
                 ),
                 const SizedBox(height: 10),
-                CustomTextField(
-                  controller: priceController,
-                  hintText: 'Price',
+                TextFormField(
+                  onChanged: (val) => price = val ?? '',
+                  validator: (val) =>
+                      val != null && val.isNotEmpty ? null : 'Required Field',
+                  initialValue: '${widget.product.price}',
+                  decoration: const InputDecoration(
+                      hintText: 'Price',
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Colors.black38,
+                      )),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Colors.black38,
+                      ))),
                 ),
                 const SizedBox(height: 10),
-                CustomTextField(
-                  controller: quantityController,
-                  hintText: 'Quantity',
+                TextFormField(
+                  onChanged: (val) => quantity = val ?? '',
+                  validator: (val) =>
+                      val != null && val.isNotEmpty ? null : 'Required Field',
+                  initialValue: '${widget.product.quantity}',
+                  decoration: const InputDecoration(
+                      hintText: 'Quantity',
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Colors.black38,
+                      )),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Colors.black38,
+                      ))),
                 ),
                 const SizedBox(height: 10),
                 SizedBox(
