@@ -17,6 +17,7 @@ app.use(authRouter);
 app.use(adminRouter);
 app.use(productRouter);
 app.use(userRouter);
+app.use(productRouter);
 
 // connnect MongGo DB
 mongoose.connect(DB).then(() => {

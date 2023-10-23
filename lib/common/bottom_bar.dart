@@ -2,6 +2,7 @@ import 'package:amazon_clone_nodejs/constants/global_variables.dart';
 import 'package:amazon_clone_nodejs/features/account/screens/account_screen.dart';
 import 'package:amazon_clone_nodejs/features/cart/screens/cart_screen.dart';
 import 'package:amazon_clone_nodejs/features/home/screens/home_screen.dart';
+import 'package:amazon_clone_nodejs/features/profile/screen/profile_screen.dart';
 import 'package:amazon_clone_nodejs/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
@@ -23,7 +24,8 @@ class _BottomBarState extends State<BottomBar> {
   List<Widget> pages = [
     const HomeScreen(),
     const AccountScreen(),
-    const CartScreen()
+    const CartScreen(),
+    const ProfileScreen()
   ];
 
   void updatePage(int page) {
@@ -114,6 +116,40 @@ class _BottomBarState extends State<BottomBar> {
                 ),
                 child: const Icon(
                   Icons.shopping_cart_outlined,
+                ),
+              ),
+            ),
+            label: '',
+          ),
+          // Profile
+          BottomNavigationBarItem(
+            icon: Container(
+              width: bottomBarWidth,
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: _page == 3
+                        ? GlobalVariables.selectedNavBarColor
+                        : GlobalVariables.backgroundColor,
+                    width: bottomBarBorderWidth,
+                  ),
+                ),
+              ),
+              child: badges.Badge(
+                badgeStyle: badges.BadgeStyle(
+                    borderRadius: BorderRadius.circular(5),
+                    shape: badges.BadgeShape.square,
+                    padding: const EdgeInsets.all(2),
+                    badgeColor: Colors.green.shade900),
+                badgeContent: const Text(
+                  '',
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+                child: const Icon(
+                  Icons.person_2,
                 ),
               ),
             ),
