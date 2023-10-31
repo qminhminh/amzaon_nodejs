@@ -3,6 +3,8 @@ import 'package:amazon_clone_nodejs/features/admin/screens/add_product_screen.da
 import 'package:amazon_clone_nodejs/features/admin/screens/cart_user.dart';
 import 'package:amazon_clone_nodejs/features/admin/screens/update_products_screen.dart';
 import 'package:amazon_clone_nodejs/features/auth/screens/auth_screen.dart';
+import 'package:amazon_clone_nodejs/features/chat/screen/chat_message.dart';
+import 'package:amazon_clone_nodejs/features/chat/screen/chat_screen.dart';
 import 'package:amazon_clone_nodejs/features/home/screens/category_deals_screen.dart';
 import 'package:amazon_clone_nodejs/features/home/screens/home_screen.dart';
 import 'package:amazon_clone_nodejs/features/product_detail/screens/product_detail_screen.dart';
@@ -41,6 +43,19 @@ Route<dynamic> generateRooute(RouteSettings routeSettings) {
         builder: (_) => UpdateProductScreen(
           product: product,
         ),
+      );
+    case ChatMessages.routeName:
+      var user = routeSettings.arguments as User;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => ChatMessages(
+          model: user,
+        ),
+      );
+    case ChatScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const ChatScreen(),
       );
     case CategoryDealsScreen.routeName:
       var category = routeSettings.arguments as String;

@@ -1,5 +1,6 @@
 import 'package:amazon_clone_nodejs/common/widgets/loader.dart';
 import 'package:amazon_clone_nodejs/constants/global_variables.dart';
+import 'package:amazon_clone_nodejs/features/chat/screen/chat_screen.dart';
 import 'package:amazon_clone_nodejs/features/profile/services/profile_services.dart';
 import 'package:amazon_clone_nodejs/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               gradient: GlobalVariables.appBarGradient,
             ),
           ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(ChatScreen.routeName);
+                },
+                icon: const Icon(Icons.chat))
+          ],
         ),
       ),
       body: userProvider == null
