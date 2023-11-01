@@ -90,7 +90,7 @@ class ChatServices {
   }) async {
     try {
       final userprovider = Provider.of<UserProvider>(context, listen: false);
-      var chatId = getConversationID(userprovider.user.id, toId);
+
       final time = DateTime.now().millisecondsSinceEpoch.toString();
       http.Response res = await http.put(
         Uri.parse('$uri/api/chat/messages/update'),
@@ -98,7 +98,7 @@ class ChatServices {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userprovider.user.token,
         },
-        body: jsonEncode({'toId': chatId, 'read': time, 'send': send}),
+        body: jsonEncode({'toId': toId, 'read': time, 'send': send}),
       );
 
       // ignore: use_build_context_synchronously
