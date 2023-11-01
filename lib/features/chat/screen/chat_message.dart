@@ -142,6 +142,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                     if (textController.text.isNotEmpty) {
                       _socketMethods.createRoomChat(widget.model,
                           textController.text, userProvider.user.id);
+                      textController.text = '';
                     }
                   },
                   minWidth: 0,

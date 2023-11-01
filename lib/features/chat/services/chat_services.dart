@@ -82,4 +82,36 @@ class ChatServices {
     String largerID = id1.hashCode <= id2.hashCode ? id2 : id1;
     return '${largerID}_$smallerID'; // Sử dụng một định dạng tùy chọn cho chatId
   }
+
+  void updateMessage({
+    required String toId,
+    required String send,
+    required BuildContext context,
+  }) async {
+    try {
+      final userprovider = Provider.of<UserProvider>(context, listen: false);
+      var chatId = getConversationID(userprovider.user.id, toId);
+      final time = DateTime.now().millisecondsSinceEpoch.toString();
+      http.Response res = await http.put(
+        Uri.parse('$uri/api/chat/messages/update'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userprovider.user.token,
+        },
+        body: jsonEncode({'toId': chatId, 'read': time, 'send': send}),
+      );
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            showSnackBar(context, 'update success');
+            print(res);
+          });
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, e.toString());
+    }
+  }
 }

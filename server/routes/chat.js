@@ -18,9 +18,7 @@ chatRouter.get('/api/chat/messages/:id',auth, async(req, res) => {
     try {
         const {id} = req.params;
         const chat = await Chat.findOne({ id: id});
-        console.log('Chat Data:', chat);
         res.json(chat);
-        console.log('Received ID:', id);
     } catch (e) {
         res.status(500).json({ error: e.message });
     }
@@ -31,6 +29,25 @@ function getConversationID(id1, id2) {
     const smallerID = id1 <= id2 ? id1 : id2;
     const largerID = id1 <= id2 ? id2 : id1;
     return `${smallerID}_${largerID}`;
-  }
+}
+
+chatRouter.put('/api/chat/messages/update',auth ,async(req,res)=>{
+   try{
+      const {toId,read,send} = req.body;
+      //const conversationID = getConversationID(id1, id2);
+      const chat = await Chat.findOne({ id: toId});
+      let message = await Message.findById(send);
+      chat.chats.message.read = read;
+       message.read = read;
+       console.log(read);
+       console.log(toId);
+       console.log(send);
+       message = await message.save();
+       console.log(message);
+    res.json(message);
+   }catch(e){
+    res.status(500).json({ error: e.message });
+   }
+});
   
 module.exports = chatRouter;
