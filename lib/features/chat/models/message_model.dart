@@ -1,32 +1,50 @@
-class Message {
-  Message({
-    required this.toId,
-    required this.msg,
-    required this.read,
-    required this.fromId,
-    required this.sent,
-  });
-  late final String toId;
-  late final String msg;
-  late final String read;
-  late final String fromId;
-  late final String sent;
+import 'dart:convert';
 
-  Message.fromJson(Map<String, dynamic> json) {
-    toId = json['toId'].toString() ?? '';
-    msg = json['msg'].toString() ?? '';
-    read = json['read'].toString() ?? '';
-    fromId = json['fromId'].toString() ?? '';
-    sent = json['sent'].toString() ?? '';
+class Message {
+  final String objectid;
+  final String id;
+  final List<dynamic> chats;
+
+  Message({
+    required this.objectid,
+    required this.id,
+    required this.chats,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'chats': chats,
+      'objectid': objectid,
+      'id': id,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['toId'] = toId;
-    data['msg'] = msg;
-    data['read'] = read;
-    data['fromId'] = fromId;
-    data['sent'] = sent;
-    return data;
+  factory Message.fromMap(Map<String, dynamic> map) {
+    return Message(
+      chats: List<Map<String, dynamic>>.from(
+        map['chats']?.map(
+          (x) => Map<String, dynamic>.from(x),
+        ),
+      ),
+      objectid: map['_id'] ?? '',
+      id: map['id'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Message.fromJson(String source) =>
+      Message.fromMap(json.decode(source));
+
+  Message copyWith({
+    List<dynamic>? chats,
+    String? objectid,
+    String? id,
+  }) {
+    return Message(
+      chats: chats ?? this.chats,
+      objectid: objectid ?? this.objectid,
+      id: id ?? this.id,
+    );
   }
 }

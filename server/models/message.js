@@ -1,16 +1,14 @@
 const mongoose = require('mongoose');
 
-const messSchema = mongoose.Schema({
+const messSchema =new mongoose.Schema({
     toId: {
         type: String,
         required: true,
-        trim: true,
         default: '',
     },
     msg: {
         type: String,
         required: true,
-        trim: true,
         default: ''
     },
     sent: {
@@ -20,7 +18,6 @@ const messSchema = mongoose.Schema({
     fromId: {
         type: String,
         required: true,
-        trim: true,
         default: '',
     },
     read: {
@@ -30,4 +27,5 @@ const messSchema = mongoose.Schema({
 
 });
 
-module.exports = messSchema;
+const Message = mongoose.model('Message',messSchema);
+module.exports = {Message,messSchema};
