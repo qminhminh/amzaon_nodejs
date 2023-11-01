@@ -16,10 +16,11 @@ chatRouter.get('/api/chat/users',auth, async(req, res) => {
 
 chatRouter.get('/api/chat/messages/:id',auth, async(req, res) => {
     try {
-        const chat = await Chat.find({
-            id: {$regex: req.params.id, $options: "i" }
-        });
+        const {id} = req.params;
+        const chat = await Chat.findOne({ id: id});
+        console.log('Chat Data:', chat);
         res.json(chat);
+        console.log('Received ID:', id);
     } catch (e) {
         res.status(500).json({ error: e.message });
     }

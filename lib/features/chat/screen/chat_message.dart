@@ -67,15 +67,18 @@ class _ChatMessagesState extends State<ChatMessages> {
           Expanded(
             child: _list == null
                 ? const Loader()
-                : ListView.builder(
-                    itemCount: _list!.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, intdex) {
-                      final messdata = _list![intdex];
-                      return MessageCard(
-                        message: messdata,
-                      );
-                    }),
+                : _list!.isEmpty
+                    ? const Center(child: Text('No messages available'))
+                    : ListView.builder(
+                        itemCount: _list!.length,
+                        reverse: true,
+                        padding: const EdgeInsets.only(top: 10),
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, intdex) {
+                          return MessageCard(
+                            message: _list![intdex],
+                          );
+                        }),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),

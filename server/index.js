@@ -80,6 +80,12 @@ io.on("connection", (socket) => {
   });
 
 });
+function getConversationID(id1, id2) {
+  // Xác định chatId dựa trên hai ID người dùng
+  const smallerID = id1 <= id2 ? id1 : id2;
+  const largerID = id1 <= id2 ? id2 : id1;
+  return `${smallerID}_${largerID}`;
+}
 
 
 // connnect MongGo DB

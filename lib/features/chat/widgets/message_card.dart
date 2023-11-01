@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 class MessageCard extends StatefulWidget {
   final Message message;
-  const MessageCard({super.key, required this.message});
+
+  const MessageCard({Key? key, required this.message}) : super(key: key);
+
   @override
   State<MessageCard> createState() => _MessageCardState();
 }
@@ -15,293 +17,94 @@ class _MessageCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    bool isMe = userProvider.user.id == widget.message.chats.first['fromId'];
 
-    return InkWell(
-      onLongPress: () {
-        //_showBottomSheet(isMe);
-      },
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: ListView.builder(
-            itemCount: widget.message.chats.length,
-            itemBuilder: (context, index) {
-              bool isMe =
-                  userProvider.user.id == widget.message.chats[index]['fromId'];
-              final chatItem = widget.message.chats[index];
-
-              return isMe ? _greenMessage(chatItem) : _blueMessage(chatItem);
-            }),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: <Widget>[
+          for (final chatItem in widget.message.chats)
+            MessageBubble(
+              chatItem: chatItem,
+              isMe: isMe,
+              id: userProvider.user.id,
+            ),
+        ],
       ),
     );
   }
-
-//isMe ? _greenMessage() : _blueMessage()
-  // send or another user message
-  Widget _blueMessage(chatItem) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          child: Container(
-              padding: const EdgeInsets.all(14),
-              margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.lightBlue),
-                  color: Colors.blue.shade50,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
-              child: Text(
-                chatItem['msg'],
-                style: const TextStyle(fontSize: 15, color: Colors.black54),
-              )),
-        ),
-
-        // time
-        Padding(
-          padding: const EdgeInsets.only(right: 04),
-          child: Text(
-            MyDateUtil.getFormattedTime(
-                context: context, time: chatItem['sent']),
-            style: const TextStyle(fontSize: 13, color: Colors.black54),
-          ),
-        ),
-        // ignore: prefer_const_constructors
-        SizedBox(
-          width: 4,
-        )
-      ],
-    );
-  }
-
-  // our or user message
-  Widget _greenMessage(chatItem) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // time
-        Row(
-          children: [
-            const SizedBox(
-              width: 04,
-            ),
-            if (chatItem['read'].isNotEmpty)
-              const Icon(
-                Icons.done_all_rounded,
-                color: Colors.blue,
-                size: 20,
-              ),
-            const SizedBox(
-              width: 2,
-            ),
-            Text(
-              MyDateUtil.getFormattedTime(
-                  context: context, time: chatItem['sent']),
-              style: const TextStyle(fontSize: 13, color: Colors.black54),
-            ),
-          ],
-        ),
-
-        // message
-        Flexible(
-          child: Container(
-              padding: const EdgeInsets.all(4),
-              margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.lightGreen),
-                  color: Colors.green.shade50,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30))),
-              child: Text(
-                chatItem['msg'],
-                style: const TextStyle(fontSize: 15, color: Colors.black54),
-              )),
-        ),
-      ],
-    );
-  }
-
-  // botom sheet
-  void _showBottomSheet(bool isMe) {
-    showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        builder: (_) {
-          return ListView(
-            shrinkWrap: true,
-            children: [
-              Container(
-                height: 4,
-                margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 4),
-                decoration: BoxDecoration(
-                    color: Colors.grey, borderRadius: BorderRadius.circular(8)),
-              ),
-
-              // option COPY TEXT
-              _OpionItem(
-                  icon: const Icon(
-                    Icons.copy_all_rounded,
-                    color: Colors.blue,
-                    size: 26,
-                  ),
-                  name: 'Copy Text',
-                  onTap: () {
-                    // Clipboard.setData(ClipboardData(text: widget.message.msg))
-                    //     .then((value) {
-                    //   Navigator.pop(context);
-                    // });
-                  }),
-              // option COPY TEXT
-
-              if (isMe)
-                const Divider(
-                  color: Colors.black54,
-                  endIndent: 4,
-                  indent: 4,
-                ),
-
-              // OPTION EDIT
-              if (isMe)
-                _OpionItem(
-                    icon: const Icon(
-                      Icons.edit,
-                      color: Colors.blue,
-                      size: 26,
-                    ),
-                    name: 'Edit Message',
-                    onTap: () {
-                      Navigator.pop(context);
-                      //_showMessageUpdate();
-                    }),
-
-              // OPTION DELETE
-              if (isMe)
-                _OpionItem(
-                    icon: const Icon(
-                      Icons.delete_forever,
-                      color: Colors.blue,
-                      size: 26,
-                    ),
-                    name: 'Delete Messgase',
-                    onTap: () async {}),
-
-              const Divider(
-                color: Colors.black54,
-                endIndent: 04,
-                indent: 04,
-              ),
-
-              // SEND TIME
-              // _OpionItem(
-              //     icon: const Icon(
-              //       Icons.access_time,
-              //       color: Colors.blue,
-              //       size: 26,
-              //     ),
-              //     name:
-              //         'Send at: ${MyDateUtil.getMessgaeTime(context: context, time: )}',
-              //     onTap: () {}),
-
-              // READ TIME
-              // _OpionItem(
-              //     icon: const Icon(
-              //       Icons.remove_red_eye,
-              //       color: Colors.blue,
-              //       size: 26,
-              //     ),
-              //     name: widget.message.read.isEmpty
-              //         ? 'Read at: Not seen yet'
-              //         : 'Read at: ${MyDateUtil.getMessgaeTime(context: context, time: widget.message.read)}',
-              //     onTap: () {}),
-            ],
-          );
-        });
-  }
-
-  // void _showMessageUpdate() {
-  //   // String updatedMsg = widget.message.msg;
-  //   showDialog(
-  //       context: context,
-  //       builder: (_) => AlertDialog(
-  //             contentPadding: const EdgeInsets.only(
-  //                 left: 24, right: 24, top: 20, bottom: 10),
-  //             shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(20)),
-  //             title: const Row(
-  //               children: [
-  //                 Icon(
-  //                   Icons.message,
-  //                   color: Colors.blue,
-  //                   size: 28,
-  //                 ),
-  //                 Text('  Update Message')
-  //               ],
-  //             ),
-  //             content: TextFormField(
-  //               maxLines: null,
-  //               onChanged: (val) => updatedMsg = val,
-  //               //onSaved: (val)=> updatedMsg = val!,
-  //               initialValue: updatedMsg,
-  //               decoration: InputDecoration(
-  //                   border: OutlineInputBorder(
-  //                       borderRadius: BorderRadius.circular(15))),
-  //             ),
-  //             actions: [
-  //               MaterialButton(
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: const Text(
-  //                   'Cancle',
-  //                   style: TextStyle(fontSize: 16, color: Colors.blue),
-  //                 ),
-  //               ),
-  //               MaterialButton(
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: const Text(
-  //                   'Update',
-  //                   style: TextStyle(fontSize: 16, color: Colors.blue),
-  //                 ),
-  //               )
-  //             ],
-  //           ));
-  // }
 }
 
-class _OpionItem extends StatelessWidget {
-  final Icon icon;
-  final String name;
-  final VoidCallback onTap;
-  const _OpionItem(
-      {required this.icon, required this.name, required this.onTap});
+class MessageBubble extends StatelessWidget {
+  final dynamic chatItem;
+  final bool isMe;
+  final String id;
+
+  const MessageBubble(
+      {Key? key, required this.chatItem, required this.isMe, required this.id})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => onTap(),
-      child: Padding(
-        // ignore: prefer_const_constructors
-        padding: EdgeInsets.only(left: 5, top: 15, bottom: 25),
-        child: Row(
-          children: [
-            icon,
-            Flexible(
-                child: Text(
-              '    $name',
-              style: const TextStyle(
-                fontSize: 15,
+    return Row(
+      mainAxisAlignment: id == chatItem['fromId']
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.start,
+      children: <Widget>[
+        if (id == chatItem['fromId'])
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.lightGreen,
+                ),
+                color: Colors.green.shade50,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(0),
+                ),
               ),
-            )),
-          ],
+              child: Text(
+                chatItem['fromId'],
+                style: const TextStyle(fontSize: 15, color: Colors.black54),
+              ),
+            ),
+          )
+        else
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.lightBlue,
+                ),
+                color: Colors.blue.shade50,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(0),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: Text(
+                chatItem['fromId'],
+                style: const TextStyle(fontSize: 15, color: Colors.black54),
+              ),
+            ),
+          ),
+        const SizedBox(width: 4),
+        Text(
+          MyDateUtil.getFormattedTime(context: context, time: chatItem['sent']),
+          style: const TextStyle(fontSize: 13, color: Colors.black54),
         ),
-      ),
+      ],
     );
   }
 }

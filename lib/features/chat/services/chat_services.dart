@@ -53,19 +53,26 @@ class ChatServices {
         },
       );
 
-      // ignore: use_build_context_synchronously
-      httpErrorHandle(
-          response: res,
-          context: context,
-          onSuccess: () {
-            for (int i = 0; i < jsonDecode(res.body).length; i++) {
-              list.add(Message.fromJson(jsonEncode(jsonDecode(res.body)[i])));
-            }
-          });
+      if (res.statusCode == 200) {
+        final decodedData = jsonDecode(res.body);
+        if (decodedData is Map<String, dynamic>) {
+          final chatObject = Message.fromJson(jsonEncode(decodedData));
+          list.add(chatObject);
+        } else {
+          // In ra thông báo lỗi nếu dữ liệu phản hồi không phải là một đối tượng.
+          print('Dữ liệu phản hồi không phải là một đối tượng: $decodedData');
+        }
+      } else {
+        // Xử lý lỗi HTTP status code khác 200 ở đây
+        print('Mã trạng thái Phản hồi HTTP: ${res.statusCode}');
+      }
+      print('HTTP Response Status Code: ${res.statusCode}');
+      print('HTTP Response Body: ${res.body}');
     } catch (e) {
       // ignore: use_build_context_synchronously
       showSnackBar(context, e.toString());
     }
+    print(list.length);
 
     return list;
   }
@@ -73,6 +80,6 @@ class ChatServices {
   static String getConversationID(String id1, String id2) {
     String smallerID = id1.hashCode <= id2.hashCode ? id1 : id2;
     String largerID = id1.hashCode <= id2.hashCode ? id2 : id1;
-    return '$smallerID-$largerID'; // Sử dụng một định dạng tùy chọn cho chatId
+    return '${largerID}_$smallerID'; // Sử dụng một định dạng tùy chọn cho chatId
   }
 }
