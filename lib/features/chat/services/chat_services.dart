@@ -115,4 +115,39 @@ class ChatServices {
       showSnackBar(context, e.toString());
     }
   }
+
+  void deleteMessage({
+    required BuildContext context,
+    required String toId,
+    required String sent,
+  }) async {
+    try {
+      final userprovider = Provider.of<UserProvider>(context, listen: false);
+      var chatId = getConversationID(userprovider.user.id, toId);
+
+      http.Response res = await http.delete(
+        Uri.parse('$uri/api/chat/message/delete'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userprovider.user.token,
+        },
+        body: jsonEncode({
+          'chatId': chatId,
+          'sent': sent,
+        }),
+      );
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            showSnackBar(context, 'Delete message successful!');
+            Navigator.pop(context);
+          });
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, e.toString());
+    }
+  }
 }

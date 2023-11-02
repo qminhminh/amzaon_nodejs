@@ -192,7 +192,12 @@ class _MessageBubbleState extends State<MessageBubble> {
                     size: 26,
                   ),
                   name: 'Delete Messgase',
-                  onTap: () {},
+                  onTap: () {
+                    _chatServices.deleteMessage(
+                        context: context,
+                        toId: chatItem['toId'],
+                        sent: chatItem['sent']);
+                  },
                 ),
               if (id == chatItem['fromId'])
                 const Divider(

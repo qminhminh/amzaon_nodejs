@@ -52,7 +52,29 @@ chatRouter.put('/api/chat/messages/update',auth ,async(req,res)=>{
         console.log('Chat not found');
       } 
 
-    res.json(message);
+    res.json({ message: 'Message read updated successfully'});
+   }catch(e){
+    res.status(500).json({ error: e.message });
+   }
+});
+
+chatRouter.delete('/api/chat/message/delete', async(req, res)=>{
+   try{
+     const {chatId, sent} = req.body;
+     let chat = await Chat.findOne({id: chatId});
+     if(chat){
+       let messageIndex = chat.chats.findIndex((msg) => msg.sent === sent);
+       if (messageIndex !== -1) {
+        chat.chats.splice(messageIndex, 1);
+        await chat.save();
+        res.json(chat.chats[messageIndex]); // Respond with the deleted message
+      } else {
+        console.log('Message to delete not found');
+      }
+     } else{
+        console.log('chat delete not found');
+     }
+
    }catch(e){
     res.status(500).json({ error: e.message });
    }
