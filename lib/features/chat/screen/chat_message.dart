@@ -1,12 +1,15 @@
 import 'package:amazon_clone_nodejs/common/widgets/loader.dart';
 import 'package:amazon_clone_nodejs/features/chat/models/message_model.dart';
 import 'package:amazon_clone_nodejs/features/chat/services/chat_services.dart';
+import 'package:amazon_clone_nodejs/features/chat/socketio/socket_client.dart';
 import 'package:amazon_clone_nodejs/features/chat/socketio/socket_method.dart';
 import 'package:amazon_clone_nodejs/features/chat/widgets/message_card.dart';
 import 'package:amazon_clone_nodejs/models/user.dart';
 import 'package:amazon_clone_nodejs/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+import 'dart:async';
 
 class ChatMessages extends StatefulWidget {
   static const String routeName = "/chat_messages";
@@ -22,22 +25,39 @@ class _ChatMessagesState extends State<ChatMessages> {
   final SocketMethods _socketMethods = SocketMethods();
   List<Message>? _list;
   final ChatServices _chatServices = ChatServices();
+  final _socketClient = SocketClient.internal.socket!;
+  Socket get socketClient => _socketClient;
+  late Timer _timer;
 
   @override
   void dispose() {
     super.dispose();
     textController.dispose();
+    _timer.cancel();
   }
 
   @override
   void initState() {
     super.initState();
     fechListMessage();
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      fetchAndSetListMessages();
+    });
   }
 
   void fechListMessage() async {
     _list = await _chatServices.getListMessages(context, widget.model.id);
     setState(() {});
+  }
+
+  void fetchAndSetListMessages() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final messages =
+        await _chatServices.getListMessages(context, widget.model.id);
+    setState(() {
+      _list = messages;
+    });
   }
 
   @override
@@ -140,8 +160,15 @@ class _ChatMessagesState extends State<ChatMessages> {
                 MaterialButton(
                   onPressed: () {
                     if (textController.text.isNotEmpty) {
+                      // create chat
                       _socketMethods.createRoomChat(widget.model,
                           textController.text, userProvider.user.id);
+                      // create sucess
+                      _socketClient.on('createRoomChatSuccess', (data) {
+                        Future.delayed(const Duration(seconds: 1), () {
+                          fechListMessage();
+                        });
+                      });
                       textController.text = '';
                     }
                   },

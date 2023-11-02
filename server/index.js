@@ -73,7 +73,8 @@ io.on("connection", (socket) => {
       }
 
       socket.join(chatId);
-      io.to(chatId).emit("createRoomChatSuccess", chat);
+      socket.emit("createRoomChatSuccess", chat);
+      console.log('createRoomChatSuccess');
     } catch (error) {
       console.log(error);
     }

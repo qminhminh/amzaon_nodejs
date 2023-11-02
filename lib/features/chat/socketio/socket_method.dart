@@ -1,4 +1,3 @@
-import 'package:amazon_clone_nodejs/features/chat/models/message_model.dart';
 import 'package:amazon_clone_nodejs/features/chat/socketio/socket_client.dart';
 import 'package:amazon_clone_nodejs/models/user.dart';
 import 'package:socket_io_client/socket_io_client.dart';
