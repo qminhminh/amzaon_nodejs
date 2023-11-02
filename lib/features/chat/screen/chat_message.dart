@@ -52,7 +52,6 @@ class _ChatMessagesState extends State<ChatMessages> {
   }
 
   void fetchAndSetListMessages() async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final messages =
         await _chatServices.getListMessages(context, widget.model.id);
     setState(() {

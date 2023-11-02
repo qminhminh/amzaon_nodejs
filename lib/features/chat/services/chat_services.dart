@@ -83,22 +83,23 @@ class ChatServices {
     return '${largerID}_$smallerID'; // Sử dụng một định dạng tùy chọn cho chatId
   }
 
-  void updateMessage({
+  void updateMessageMsg({
     required String toId,
-    required String send,
+    required String sent,
+    required String msg,
     required BuildContext context,
   }) async {
     try {
       final userprovider = Provider.of<UserProvider>(context, listen: false);
-
-      final time = DateTime.now().millisecondsSinceEpoch.toString();
+      var chatId = getConversationID(userprovider.user.id, toId);
+      print("update msg" + chatId);
       http.Response res = await http.put(
         Uri.parse('$uri/api/chat/messages/update'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userprovider.user.token,
         },
-        body: jsonEncode({'toId': toId, 'read': time, 'send': send}),
+        body: jsonEncode({'chatId': chatId, 'sent': sent, 'msg': msg}),
       );
 
       // ignore: use_build_context_synchronously
@@ -106,7 +107,7 @@ class ChatServices {
           response: res,
           context: context,
           onSuccess: () {
-            showSnackBar(context, 'update success');
+            showSnackBar(context, 'update read success');
             print(res);
           });
     } catch (e) {

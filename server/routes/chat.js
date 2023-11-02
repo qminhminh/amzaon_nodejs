@@ -33,17 +33,25 @@ function getConversationID(id1, id2) {
 
 chatRouter.put('/api/chat/messages/update',auth ,async(req,res)=>{
    try{
-      const {toId,read,send} = req.body;
-      //const conversationID = getConversationID(id1, id2);
-      const chat = await Chat.findOne({ id: toId});
-      let message = await Message.findById(send);
-      chat.chats.message.read = read;
-       message.read = read;
-       console.log(read);
-       console.log(toId);
-       console.log(send);
-       message = await message.save();
-       console.log(message);
+      const {chatId, sent , msg} = req.body;
+      console.log("update read: " + chatId);
+      let chat = await Chat.findOne({ id: chatId});
+      if(chat){
+         const message = chat.chats.find((msg) => msg.sent === sent);
+        if(message){
+            console.log(message);
+            message.msg = msg;
+
+            await chat.save();
+        }
+        else {
+            console.log('Message with sent timestamp not found');
+          }
+      }
+      else {
+        console.log('Chat not found');
+      } 
+
     res.json(message);
    }catch(e){
     res.status(500).json({ error: e.message });

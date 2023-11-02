@@ -1,4 +1,6 @@
+import 'package:amazon_clone_nodejs/constants/utils.dart';
 import 'package:amazon_clone_nodejs/features/chat/models/message_model.dart';
+import 'package:amazon_clone_nodejs/features/chat/services/chat_services.dart';
 import 'package:amazon_clone_nodejs/helpers/my_date_uitls.dart';
 import 'package:amazon_clone_nodejs/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +41,7 @@ class _MessageCardState extends State<MessageCard> {
   }
 }
 
-class MessageBubble extends StatelessWidget {
+class MessageBubble extends StatefulWidget {
   final dynamic chatItem;
   final bool isMe;
   final String id;
@@ -54,21 +56,30 @@ class MessageBubble extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<MessageBubble> createState() => _MessageBubbleState();
+}
+
+class _MessageBubbleState extends State<MessageBubble> {
+  final ChatServices _chatServices = ChatServices();
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onLongPress: () {
-        _showBottomSheet(chatItem, id);
+        _showBottomSheet(widget.chatItem, widget.id);
       },
       child: Row(
-        mainAxisAlignment: id == chatItem['fromId']
+        mainAxisAlignment: widget.id == widget.chatItem['fromId']
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
         children: <Widget>[
-          id == chatItem['fromId'] ? _greenMessage() : _blueMessage(),
+          widget.id == widget.chatItem['fromId']
+              ? _greenMessage()
+              : _blueMessage(),
           const SizedBox(width: 4),
           Text(
             MyDateUtil.getFormattedTime(
-                context: context, time: chatItem['sent']),
+                context: context, time: widget.chatItem['sent']),
             style: const TextStyle(fontSize: 13, color: Colors.black54),
           ),
         ],
@@ -94,7 +105,7 @@ class MessageBubble extends StatelessWidget {
           ),
         ),
         child: Text(
-          chatItem['msg'],
+          widget.chatItem['msg'],
           style: const TextStyle(fontSize: 15, color: Colors.black54),
         ),
       ),
@@ -119,7 +130,7 @@ class MessageBubble extends StatelessWidget {
           ),
         ),
         child: Text(
-          chatItem['msg'],
+          widget.chatItem['msg'],
           style: const TextStyle(fontSize: 15, color: Colors.black54),
         ),
       ),
@@ -128,7 +139,7 @@ class MessageBubble extends StatelessWidget {
 
   void _showBottomSheet(dynamic chatItem, String id) {
     showModalBottomSheet(
-        context: context,
+        context: widget.context,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
@@ -152,7 +163,7 @@ class MessageBubble extends StatelessWidget {
                   onTap: () {
                     Clipboard.setData(ClipboardData(text: chatItem['msg']))
                         .then((value) {
-                      Navigator.pop(context);
+                      Navigator.pop(widget.context);
                     });
                   }),
               const Divider(
@@ -169,8 +180,9 @@ class MessageBubble extends StatelessWidget {
                     ),
                     name: 'Edit Message',
                     onTap: () {
-                      Navigator.pop(context);
-                      //_showMessageUpdate();
+                      Navigator.pop(widget.context);
+
+                      _showMessageUpdate(chatItem, widget.id);
                     }),
               if (id == chatItem['fromId'])
                 _OpionItem(
@@ -195,7 +207,7 @@ class MessageBubble extends StatelessWidget {
                     size: 26,
                   ),
                   name:
-                      'Send at: ${MyDateUtil.getMessgaeTime(context: context, time: chatItem['sent'])}',
+                      'Send at: ${MyDateUtil.getMessgaeTime(context: widget.context, time: chatItem['sent'])}',
                   onTap: () {}),
               _OpionItem(
                   icon: const Icon(
@@ -205,11 +217,72 @@ class MessageBubble extends StatelessWidget {
                   ),
                   name: chatItem['read'].isEmpty
                       ? 'Read at: Not seen yet'
-                      : 'Read at: ${MyDateUtil.getMessgaeTime(context: context, time: chatItem['read'])}',
+                      : 'Read at: ${MyDateUtil.getMessgaeTime(context: widget.context, time: chatItem['read'])}',
                   onTap: () {}),
             ],
           );
         });
+  }
+
+  void _showMessageUpdate(dynamic chatItem, String id) {
+    String msgchange = '';
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        contentPadding:
+            const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(
+              Icons.message,
+              color: Colors.blue,
+              size: 28,
+            ),
+            Text('  Update Message')
+          ],
+        ),
+        content: TextFormField(
+          maxLines: null,
+          onChanged: (val) {
+            setState(() {
+              msgchange = val;
+            });
+          },
+          initialValue: chatItem['msg'],
+          decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
+        ),
+        actions: [
+          MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text(
+              'Cancle',
+              style: TextStyle(fontSize: 16, color: Colors.blue),
+            ),
+          ),
+          MaterialButton(
+            onPressed: () {
+              _chatServices.updateMessageMsg(
+                  toId: chatItem['toId'],
+                  sent: chatItem['sent'],
+                  msg: msgchange,
+                  context: context);
+              showSnackBar(context, 'Update $msgchange successfull!');
+              Navigator.pop(context);
+            },
+            child: const Text(
+              'Update',
+              style: TextStyle(fontSize: 16, color: Colors.blue),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
 
