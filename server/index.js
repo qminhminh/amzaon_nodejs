@@ -69,8 +69,8 @@ io.on("connection", (socket) => {
             },
           ],
         });
-        io.sockets.emit("createRoomChatSuccess", message);
         await chatMess.save();
+        io.sockets.emit("createRoomChatSuccess", message);
       }
 
       //socket.join(chatId);
