@@ -10,8 +10,9 @@ class SocketClient {
         'http://192.168.1.5:4000',
         OptionBuilder()
             .setTransports(['websocket']) // for Flutter or Dart VM
-            .disableAutoConnect() // optional
-            .build());
+            .enableAutoConnect()
+            .build() // optional
+        );
 
     socket!.connect();
   }
