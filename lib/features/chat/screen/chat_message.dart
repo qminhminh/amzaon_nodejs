@@ -168,7 +168,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                       textController.text = '';
                       _socketClient.on('createRoomChatSuccess', (message) {
                         Future.delayed(const Duration(seconds: 1), () {
-                          // fechListMessage();
+                          fechListMessage();
                           setState(() {
                             messtext = message;
                             fechListMessage();
