@@ -28,7 +28,7 @@ app.use(chatRouter);
 
 // socket io
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log(`a ${socket.id} connected`);
   socket.on("disconnect", () => {
     console.log("a user disconnected");
   });
@@ -52,9 +52,10 @@ io.on("connection", (socket) => {
           sent: time,
           fromId: id,
         };
-
+       
         chat.chats.push(mess);
         await chat.save();
+        io.sockets.emit("createRoomChatSuccess", message);
       } else {
         // Chat doesn't exist, create a new chat
         const chatMess = new Chat({
@@ -68,12 +69,12 @@ io.on("connection", (socket) => {
             },
           ],
         });
-
+        io.sockets.emit("createRoomChatSuccess", message);
         await chatMess.save();
       }
 
-      socket.join(chatId);
-      socket.emit("createRoomChatSuccess", chat);
+      //socket.join(chatId);
+     
       console.log('createRoomChatSuccess');
     } catch (error) {
       console.log(error);

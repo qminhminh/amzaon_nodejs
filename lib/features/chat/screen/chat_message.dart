@@ -28,6 +28,7 @@ class _ChatMessagesState extends State<ChatMessages> {
   final _socketClient = SocketClient.internal.socket!;
   Socket get socketClient => _socketClient;
   late Timer _timer;
+  String messtext = "";
 
   @override
   void dispose() {
@@ -41,9 +42,9 @@ class _ChatMessagesState extends State<ChatMessages> {
     super.initState();
     fechListMessage();
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      fetchAndSetListMessages();
-    });
+    // _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+    //   fetchAndSetListMessages();
+    // });
   }
 
   void fechListMessage() async {
@@ -76,7 +77,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               Text(
-                widget.model.email,
+                messtext,
                 style: const TextStyle(fontSize: 13),
               ),
             ]),
@@ -163,12 +164,17 @@ class _ChatMessagesState extends State<ChatMessages> {
                       _socketMethods.createRoomChat(widget.model,
                           textController.text, userProvider.user.id);
                       // create sucess
-                      _socketClient.on('createRoomChatSuccess', (data) {
+
+                      textController.text = '';
+                      _socketClient.on('createRoomChatSuccess', (message) {
                         Future.delayed(const Duration(seconds: 1), () {
-                          fechListMessage();
+                          // fechListMessage();
+                          setState(() {
+                            messtext = message;
+                            fechListMessage();
+                          });
                         });
                       });
-                      textController.text = '';
                     }
                   },
                   minWidth: 0,
