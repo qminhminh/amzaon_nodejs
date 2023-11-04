@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:amazon_clone_nodejs/common/widgets/loader.dart';
 import 'package:amazon_clone_nodejs/features/chat/models/message_model.dart';
 import 'package:amazon_clone_nodejs/features/chat/services/chat_services.dart';
