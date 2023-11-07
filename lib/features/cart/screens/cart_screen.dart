@@ -3,6 +3,7 @@ import 'package:amazon_clone_nodejs/constants/global_variables.dart';
 import 'package:amazon_clone_nodejs/features/address/screens/address_screen.dart';
 import 'package:amazon_clone_nodejs/features/cart/widgets/cart_product.dart';
 import 'package:amazon_clone_nodejs/features/cart/widgets/cart_subtotal.dart';
+import 'package:amazon_clone_nodejs/features/chart/services/chart_services.dart';
 import 'package:amazon_clone_nodejs/features/home/widgets/address_box.dart';
 import 'package:amazon_clone_nodejs/features/search/screens/search_screen.dart';
 import 'package:amazon_clone_nodejs/providers/user_provider.dart';
@@ -17,6 +18,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final ChartServices _chartServices = ChartServices();
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
@@ -27,6 +29,8 @@ class _CartScreenState extends State<CartScreen> {
       AddressScreen.routeName,
       arguments: sum.toString(),
     );
+
+    _chartServices.createChart(context: context, money: sum);
   }
 
   @override

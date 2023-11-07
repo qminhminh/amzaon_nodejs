@@ -7,6 +7,7 @@ const productRouter = require('./routes/product');
 const userRouter = require('./routes/user');
 const chatRouter = require('./routes/chat');
 const Chat = require('./models/chat');
+const chartRouter = require('./routes/chart');
 const DB = "mongodb+srv://hqminh050503:minh0505@cluster0.us3cipj.mongodb.net/?retryWrites=true&w=majority";
 const PORT = process.env.PORT || 3000;
 const PORTSERVER = process.env.PORT || 4000;
@@ -25,6 +26,7 @@ app.use(productRouter);
 app.use(userRouter);
 app.use(productRouter);
 app.use(chatRouter);
+app.use(chartRouter);
 
 // socket io
 io.on("connection", (socket) => {
