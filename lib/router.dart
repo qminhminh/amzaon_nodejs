@@ -3,6 +3,7 @@ import 'package:amazon_clone_nodejs/features/admin/screens/add_product_screen.da
 import 'package:amazon_clone_nodejs/features/admin/screens/cart_user.dart';
 import 'package:amazon_clone_nodejs/features/admin/screens/update_products_screen.dart';
 import 'package:amazon_clone_nodejs/features/auth/screens/auth_screen.dart';
+import 'package:amazon_clone_nodejs/features/chart/screen/chart_screen.dart';
 import 'package:amazon_clone_nodejs/features/chat/screen/chat_message.dart';
 import 'package:amazon_clone_nodejs/features/chat/screen/chat_screen.dart';
 import 'package:amazon_clone_nodejs/features/home/screens/category_deals_screen.dart';
@@ -26,6 +27,9 @@ Route<dynamic> generateRooute(RouteSettings routeSettings) {
     case HomeScreen.reouteName:
       return MaterialPageRoute(
           settings: routeSettings, builder: (_) => const HomeScreen());
+    case ChartScreen.routeName:
+      return MaterialPageRoute(
+          settings: routeSettings, builder: (_) => const ChartScreen());
 
     case BottomBar.routeName:
       return MaterialPageRoute(

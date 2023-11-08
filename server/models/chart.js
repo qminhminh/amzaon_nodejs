@@ -6,10 +6,7 @@ const chartSchema = mongoose.Schema({
         type: String,
         default: '',
     },
-    date:{
-        type: String,
-        default:'',
-    },
+    
     moneys:[listmoneySchema],
 });
 

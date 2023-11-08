@@ -5,6 +5,10 @@ const listmoneySchema = new mongoose.Schema({
     type: Number,
     default: 0,
    },
+   date:{
+      type: String,
+      default:'',
+  },
 });
 
 const ListMoney = mongoose.model('ListMoney', listmoneySchema);

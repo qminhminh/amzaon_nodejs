@@ -11,24 +11,20 @@ chartRouter.post('/api/chart/create',auth, async(req,res)=>{
      console.log("Money:"+money);
      console.log("Date:"+date);
       if(chartid){
-        let chartdate= await Chart.findOne({date: date});
-        if(chartdate){
            const monney = {
              money: money,
+             date: date,
            };
            chartid.moneys.push(monney);
            await chartid.save();
-        }else{
-            console.log('Khong tim thay chart date');
-
-        }
+       
       }else{
         console.log('Khong tim thay chart id');
         const chart = new Chart({
             id: id,
-            date: date,
             moneys:[{
                 money:money,
+                date: date,
             },],
             date:date
          });
@@ -36,7 +32,6 @@ chartRouter.post('/api/chart/create',auth, async(req,res)=>{
          await chart.save();
          
       }
-    
    }catch(e){
     res.status(500).json({error : e.message});
    }

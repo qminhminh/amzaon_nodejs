@@ -72,8 +72,6 @@ class ChatServices {
       // ignore: use_build_context_synchronously
       showSnackBar(context, e.toString());
     }
-    print(list.length);
-
     return list;
   }
 

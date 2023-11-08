@@ -1,5 +1,6 @@
 import 'package:amazon_clone_nodejs/features/account/services/account_services.dart';
 import 'package:amazon_clone_nodejs/features/account/widgets/account_button.dart';
+import 'package:amazon_clone_nodejs/features/chart/screen/chart_screen.dart';
 import 'package:flutter/material.dart';
 
 class TopButtons extends StatelessWidget {
@@ -16,8 +17,10 @@ class TopButtons extends StatelessWidget {
               onTap: () {},
             ),
             AccountButton(
-              text: 'Turn Seller',
-              onTap: () {},
+              text: 'Chart',
+              onTap: () {
+                Navigator.pushNamed(context, ChartScreen.routeName);
+              },
             ),
           ],
         ),
