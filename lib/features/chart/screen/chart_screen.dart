@@ -136,10 +136,6 @@ class _ChartScreenState extends State<ChartScreen> {
           if (_list != null) {
             int index = value.toInt();
             if (index >= 0 && index < _list!.length) {
-              // Assuming you have a 'date' property in your 'point' data.
-              int money = _list![index].moneys.first['money'] as int;
-
-              // You can format the date as needed.
               return Text('$total');
             }
           }

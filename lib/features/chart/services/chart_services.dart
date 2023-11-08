@@ -3,7 +3,6 @@ import 'package:amazon_clone_nodejs/constants/error_handing.dart';
 import 'package:amazon_clone_nodejs/constants/global_variables.dart';
 import 'package:amazon_clone_nodejs/constants/utils.dart';
 import 'package:amazon_clone_nodejs/features/chart/model/chart_model.dart';
-import 'package:amazon_clone_nodejs/features/chart/provider/chart_provider.dart';
 import 'package:amazon_clone_nodejs/providers/user_provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
