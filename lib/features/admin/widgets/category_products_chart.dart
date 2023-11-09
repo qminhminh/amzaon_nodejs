@@ -1,19 +1,36 @@
-// import 'package:amazon_clone_nodejs/features/admin/models/sales.dart';
-// import 'package:flutter_charts/flutter_charts.dart' as charts;
-// import 'package:flutter/material.dart';
+import 'package:amazon_clone_nodejs/features/admin/models/sales.dart';
+import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 
-// class CategoryProductsChart extends StatelessWidget {
-//   final List<charts.Series<Sales, String>> seriesList;
-//   const CategoryProductsChart({
-//     Key? key,
-//     required this.seriesList,
-//   }) : super(key: key);
+class CategoryProductsChart extends StatelessWidget {
+  final List<Sales> salesData;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return charts.BarChart(
-//       seriesList,
-//       animate: true,
-//     );
-//   }
-// }
+  CategoryProductsChart({
+    Key? key,
+    required this.salesData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BarChart(
+      BarChartData(
+        titlesData: const FlTitlesData(show: false),
+        borderData: FlBorderData(show: false),
+        barGroups: salesData
+            .asMap()
+            .entries
+            .map((entry) => BarChartGroupData(
+                  x: entry.key,
+                  barRods: [
+                    BarChartRodData(
+                      toY: entry.value.earning.toDouble(),
+                      width: 20, // Width of each bar
+                      color: Colors.blue, // Color of the bar
+                    ),
+                  ],
+                ))
+            .toList(),
+      ),
+    );
+  }
+}

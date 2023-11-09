@@ -94,7 +94,8 @@ class _ChartScreenState extends State<ChartScreen> {
                 x: chart.moneys.indexOf(point), // Use the index as X
                 barRods: [
                   BarChartRodData(
-                      toY: point['money'].toDouble()), // Use 'money' as Y
+                    toY: point['money'].toDouble(),
+                  ), // Use 'money' as Y
                 ],
               ),
             ),
@@ -107,60 +108,105 @@ class _ChartScreenState extends State<ChartScreen> {
   }
 
   // bootm
-  SideTitles get _bottomTitles => SideTitles(
+  SideTitles get _bottomTitles {
+    if (_list != null) {
+      // Extract all unique dates
+      // ignore: prefer_collection_literals
+      Set<String> uniqueDates = Set<String>();
+      for (var chart in _list!) {
+        for (var point in chart.moneys) {
+          String date = point['date'] ?? '';
+          uniqueDates.add(date);
+        }
+      }
+
+      // Convert set of unique dates to a list and sort them if needed
+      List<String> sortedDates = uniqueDates.toList();
+      sortedDates.sort();
+
+      // Generate titles based on unique dates
+      return SideTitles(
         showTitles: true,
         getTitlesWidget: (value, meta) {
           if (_list != null) {
             int index = value.toInt();
-            if (index >= 0 && index < _list!.length) {
-              // Assuming you have a 'date' property in your 'point' data.
-              String date = _list![index].moneys.first['date'] ?? '';
-              if (date != currentDay) {
-                // Ngày khác nhau, hiển thị ngày
-                return Text(date);
-              }
-              // You can format the date as needed.
-              return Text(date);
+            if (index >= 0 && index < sortedDates.length) {
+              return Text(sortedDates[index]);
             }
           }
-
-          // Return an empty Text widget when conditions are not met.
           return const Text('');
         },
       );
+    } else {
+      return const SideTitles(showTitles: false);
+    }
+  }
 
-  // top title
-  SideTitles get _topTitles => SideTitles(
+  SideTitles get _topTitles {
+    if (_list != null) {
+      // Extract all unique dates
+      // ignore: prefer_collection_literals
+      Set<String> uniqueDates = Set<String>();
+      for (var chart in _list!) {
+        for (var point in chart.moneys) {
+          int date = point['money'] ?? 0;
+          uniqueDates.add(date.toString());
+        }
+      }
+
+      // Convert set of unique dates to a list and sort them if needed
+      List<String> sortedDates = uniqueDates.toList();
+      sortedDates.sort();
+
+      // Generate titles based on unique dates
+      return SideTitles(
         showTitles: true,
         getTitlesWidget: (value, meta) {
           if (_list != null) {
             int index = value.toInt();
-            if (index >= 0 && index < _list!.length) {
-              return Text('$total');
+            if (index >= 0 && index < sortedDates.length) {
+              return Text(sortedDates[index]);
             }
           }
-
-          // Return an empty Text widget when conditions are not met.
           return const Text('');
         },
       );
+    } else {
+      return const SideTitles(showTitles: false);
+    }
+  }
 
-  SideTitles get _leftTitles => SideTitles(
+  SideTitles get _leftTitles {
+    if (_list != null) {
+      // Extract all unique dates
+      // ignore: prefer_collection_literals
+      Set<String> uniqueDates = Set<String>();
+      for (var chart in _list!) {
+        for (var point in chart.moneys) {
+          int date = point['money'] ?? 0;
+          uniqueDates.add(date.toString());
+        }
+      }
+
+      // Convert set of unique dates to a list and sort them if needed
+      List<String> sortedDates = uniqueDates.toList();
+      sortedDates.sort();
+
+      // Generate titles based on unique dates
+      return SideTitles(
         showTitles: true,
         getTitlesWidget: (value, meta) {
           if (_list != null) {
             int index = value.toInt();
-            if (index >= 0 && index < _list!.length) {
-              // Assuming you have a 'date' property in your 'point' data.
-              int money = _list![index].moneys.first['money'] as int;
-
-              // You can format the date as needed.
-              return Text('$money');
+            if (index >= 0 && index < sortedDates.length) {
+              return Text(sortedDates[index]);
             }
           }
-
-          // Return an empty Text widget when conditions are not met.
           return const Text('');
         },
       );
+    } else {
+      return const SideTitles(showTitles: false);
+    }
+  }
 }
