@@ -6,6 +6,7 @@ import 'package:amazon_clone_nodejs/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_paypal/flutter_paypal.dart';
 
 class AddressScreen extends StatefulWidget {
   static const String routeName = '/address';
@@ -205,6 +206,81 @@ class _AddressScreenState extends State<AddressScreen> {
                 margin: const EdgeInsets.only(top: 15),
                 loadingIndicator: const Center(
                   child: CircularProgressIndicator(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                color: Colors.black54,
+                child: Center(
+                  child: TextButton(
+                      onPressed: () => {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => UsePaypal(
+                                    sandboxMode: true,
+                                    clientId:
+                                        "Aa1DnaZhnaIYNHOsM1VwGgFmr5yWg05yDfTohd0IliqUko4JwDGu7aAJ1w1CGwXp0oqfZ7YmXE24M_bs",
+                                    secretKey:
+                                        "EAlJ-E4HpgP_1gIvFstbmfSlLmmYp2vqaFcm4a1t-BZSrRvt6R_yQhXPQhoLLKwIdpWhdBw6GIkyChQ2",
+                                    returnURL: "https://samplesite.com/return",
+                                    cancelURL: "https://samplesite.com/cancel",
+                                    transactions: const [
+                                      {
+                                        "amount": {
+                                          "total": '10.12',
+                                          "currency": "USD",
+                                          "details": {
+                                            "subtotal": '10.12',
+                                            "shipping": '0',
+                                            "shipping_discount": 1
+                                          }
+                                        },
+                                        "description":
+                                            "The payment transaction description.",
+                                        "payment_options": {
+                                          "allowed_payment_method":
+                                              "INSTANT_FUNDING_SOURCE"
+                                        },
+                                        "item_list": {
+                                          "items": [
+                                            {
+                                              "name": "A demo product",
+                                              "quantity": 1,
+                                              "price": '10.12',
+                                              "currency": "USD"
+                                            }
+                                          ],
+
+                                          // shipping address is not required though
+                                          "shipping_address": {
+                                            "recipient_name": "Jane Foster",
+                                            "line1": "Travis County",
+                                            "line2": "",
+                                            "city": "Austin",
+                                            "country_code": "US",
+                                            "postal_code": "73301",
+                                            "phone": "+00000000",
+                                            "state": "Texas"
+                                          },
+                                        }
+                                      }
+                                    ],
+                                    note:
+                                        "Contact us for any questions on your order.",
+                                    onSuccess: onGooglePayResult,
+                                    onError: (error) {
+                                      print("onError: $error");
+                                    },
+                                    onCancel: (params) {
+                                      print('cancelled: $params');
+                                    }),
+                              ),
+                            ),
+                          },
+                      child: const Text(
+                        "Buy with PayPal",
+                        style: TextStyle(color: Colors.white),
+                      )),
                 ),
               ),
             ],
