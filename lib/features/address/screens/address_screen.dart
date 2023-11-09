@@ -219,9 +219,9 @@ class _AddressScreenState extends State<AddressScreen> {
                                 builder: (BuildContext context) => UsePaypal(
                                     sandboxMode: true,
                                     clientId:
-                                        "Aa1DnaZhnaIYNHOsM1VwGgFmr5yWg05yDfTohd0IliqUko4JwDGu7aAJ1w1CGwXp0oqfZ7YmXE24M_bs",
+                                        "AYAq0Hc7NXMXod0TqUfjbuXbGGoo9TbbOXz9BJSAhMvQ4It195jBjATw279K9czfaHN2QNNe6rUONPxW",
                                     secretKey:
-                                        "EAlJ-E4HpgP_1gIvFstbmfSlLmmYp2vqaFcm4a1t-BZSrRvt6R_yQhXPQhoLLKwIdpWhdBw6GIkyChQ2",
+                                        "EGijrUlMNco2qdLtlrnybY1oq2zLtspGcDQ6Z6dLRxSOQTbnr5zfgYVoPu4WH8MhFO3oWuvHe6JzEBS8",
                                     returnURL: "https://samplesite.com/return",
                                     cancelURL: "https://samplesite.com/cancel",
                                     transactions: const [
@@ -237,10 +237,10 @@ class _AddressScreenState extends State<AddressScreen> {
                                         },
                                         "description":
                                             "The payment transaction description.",
-                                        "payment_options": {
-                                          "allowed_payment_method":
-                                              "INSTANT_FUNDING_SOURCE"
-                                        },
+                                        // "payment_options": {
+                                        //   "allowed_payment_method":
+                                        //       "INSTANT_FUNDING_SOURCE"
+                                        // },
                                         "item_list": {
                                           "items": [
                                             {
@@ -267,7 +267,9 @@ class _AddressScreenState extends State<AddressScreen> {
                                     ],
                                     note:
                                         "Contact us for any questions on your order.",
-                                    onSuccess: onGooglePayResult,
+                                    onSuccess: (error) {
+                                      print("onSuccess: $error");
+                                    },
                                     onError: (error) {
                                       print("onError: $error");
                                     },
