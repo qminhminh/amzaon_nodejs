@@ -90,6 +90,7 @@ class ChatServices {
     try {
       final userprovider = Provider.of<UserProvider>(context, listen: false);
       var chatId = getConversationID(userprovider.user.id, toId);
+      // ignore: prefer_interpolation_to_compose_strings
       print("update msg" + chatId);
       http.Response res = await http.put(
         Uri.parse('$uri/api/chat/messages/update'),
