@@ -87,6 +87,24 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on('startRoomChat', async({toId, fromId})=>{
+     console.log(toId);
+     console.log(fromId);
+    try{
+      const chatId = getConversationID(toId, fromId);
+      let chat = await Chat.findOne({id: chatId});
+    if(chat){
+       io.sockets.emit('go', chat);
+       print(chat);
+    }else{
+      console.log('start room chat false ');
+    }
+    }catch(e){
+      console.log(e);
+    }
+
+  });
+
 });
 function getConversationID(id1, id2) {
   // Xác định chatId dựa trên hai ID người dùng

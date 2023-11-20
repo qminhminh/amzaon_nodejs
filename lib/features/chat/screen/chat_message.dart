@@ -45,6 +45,12 @@ class _ChatMessagesState extends State<ChatMessages> {
     // _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
     //   fetchAndSetListMessages();
     // });
+
+    getStartRoomChat();
+  }
+
+  void getStartRoomChat() {
+    _socketMethods.startRoomChat(widget.model.id, context);
   }
 
   void fechListMessage() async {
