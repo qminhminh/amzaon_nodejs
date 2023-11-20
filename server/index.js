@@ -8,6 +8,8 @@ const userRouter = require('./routes/user');
 const chatRouter = require('./routes/chat');
 const Chat = require('./models/chat');
 const chartRouter = require('./routes/chart');
+const morgan = require('morgan');
+const morgandebug = require('morgan-debug');
 const DB = "mongodb+srv://hqminh050503:minh0505@cluster0.us3cipj.mongodb.net/?retryWrites=true&w=majority";
 const PORT = process.env.PORT || 3000;
 const PORTSERVER = process.env.PORT || 4000;
@@ -20,6 +22,8 @@ var io = require("socket.io")(server);
 
 // middleware client->middleware->server->client
 app.use(express.json());
+app.use(morgan('combined'));
+app.use(morgandebug('server:server', 'dev'));
 app.use(authRouter);
 app.use(adminRouter);
 app.use(productRouter);
