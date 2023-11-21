@@ -24,12 +24,13 @@ class SocketMethods {
     }
   }
 
-  void startRoomChat(String toId, BuildContext context) {
+  void startRoomChat(User user, BuildContext context) {
     final userprovider = Provider.of<UserProvider>(context, listen: false);
     // ignore: unnecessary_null_comparison
-    if (toId != null && userprovider.user.id != null) {
-      _socketClient.emit(
-          'startRoomChat', {'toId': toId, 'fromId': userprovider.user.id});
-    }
+
+    _socketClient.emit(
+      'startRoomChat',
+      {'user': user, 'id': userprovider.user.id},
+    );
   }
 }

@@ -1,3 +1,7 @@
+// ignore_for_file: avoid_print
+
+import 'dart:convert';
+
 import 'package:amazon_clone_nodejs/common/widgets/loader.dart';
 import 'package:amazon_clone_nodejs/features/chat/models/message_model.dart';
 import 'package:amazon_clone_nodejs/features/chat/services/chat_services.dart';
@@ -24,6 +28,7 @@ class _ChatMessagesState extends State<ChatMessages> {
   final textController = TextEditingController();
   final SocketMethods _socketMethods = SocketMethods();
   List<Message>? _list;
+  List<Message>? _listmess;
   final ChatServices _chatServices = ChatServices();
   final _socketClient = SocketClient.internal.socket!;
   Socket get socketClient => _socketClient;
@@ -42,15 +47,33 @@ class _ChatMessagesState extends State<ChatMessages> {
     super.initState();
     fechListMessage();
 
-    // _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-    //   fetchAndSetListMessages();
-    // });
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      fetchAndSetListMessages();
+    });
 
-    getStartRoomChat();
+    //getStartRoomChat();
   }
 
   void getStartRoomChat() {
-    _socketMethods.startRoomChat(widget.model.id, context);
+    _socketMethods.startRoomChat(widget.model, context);
+
+    // get list strat
+    _socketClient.on("go", (data) {
+      final decodedData = jsonDecode(data);
+      if (decodedData is Map<String, dynamic>) {
+        final chatObject = Message.fromJson(jsonEncode(decodedData));
+        setState(() {
+          _listmess ??= [];
+          _listmess?.add(chatObject);
+
+          _list = _listmess!.toList();
+          print(_list);
+        });
+      } else {
+        // In ra thông báo lỗi nếu dữ liệu phản hồi không phải là một đối tượng.
+        print('Dữ liệu phản hồi không phải là một đối tượng: $decodedData');
+      }
+    });
   }
 
   void fechListMessage() async {

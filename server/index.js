@@ -41,11 +41,6 @@ io.on("connection", (socket) => {
 
   socket.on("createRoomChat", async ({ user, message, time, id }) => {
     const userData = JSON.parse(user);
-    console.log(message);
-    console.log(time);
-    console.log("toID:" + userData.id);
-    console.log("fromID:" + id);
-
     try {
       const chatId = getConversationID(id, userData.id);
       let chat = await Chat.findOne({ id: chatId });
@@ -87,15 +82,19 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on('startRoomChat', async({toId, fromId})=>{
-     console.log(toId);
-     console.log(fromId);
+  socket.on('startRoomChat', async({user, id})=>{
+    const userData = JSON.parse(user);
+    console.log("toID:" + userData.id);
+    console.log("fromID:" + id);
     try{
-      const chatId = getConversationID(toId, fromId);
+      const chatId = getConversationID(id, userData.id);
       let chat = await Chat.findOne({id: chatId});
     if(chat){
-       io.sockets.emit('go', chat);
-       print(chat);
+      const chatJSON = JSON.stringify(chat);
+
+      // Gửi dữ liệu dưới dạng JSON đến client
+      io.sockets.emit('go', chatJSON);
+       console.log(chat);
     }else{
       console.log('start room chat false ');
     }
