@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:amazon_clone_nodejs/common/widgets/custom_textdield.dart';
 import 'package:amazon_clone_nodejs/constants/global_variables.dart';
 import 'package:amazon_clone_nodejs/constants/utils.dart';
